@@ -1,3 +1,8 @@
+function clearData(className) {
+    let classn = "." + className;
+    $(classn).children().remove();
+
+}
 
 $("#searchBtn").click(function () {
     const searchText = $("#searchTxt").val();
@@ -13,23 +18,25 @@ $("#searchBtn").click(function () {
         $.get("https://api.giphy.com/v1/gifs/search?api_key=5bROKS6CGk7upkhqxbHVkDEGl8mbhGko&q=" + searchText + "&limit=28&offset=0&rating=pg-13&lang=en", function (response) {
             $.each(response.data, function (index, value) {
                 const imgSrc = value.images.downsized_large.url
+                const gifs = "<img src=" + imgSrc + " class='col-sm-12 col-md-6 col-lg-3 img-fluid image' data-toggle='modal' data-target='#gifModal' />";
 
-                $('#result').append("<img src=" + imgSrc + " class='col-sm-12 col-md-6 col-lg-3 img-fluid image' data-toggle='modal' data-target='#gifModal' />");
+                $('#result').append(gifs);
 
             })
             $('#result').on('click', '.image', function () {
 
+                let individualGif = "<img src=" + this.src + " class='indImage' /> ";
+                const ratingHtml = "<h6>Rate this GIF: </h6> <div class='rating-stars text-center'><ul id='stars'><li class='star' title='Poor' data-value='1'> <i class='fa fa-star fa-fw'></i> </li> <li class='star' title='Fair' data-value='2'> <i class='fa fa-star fa-fw'></i></li><li class='star' title='Good' data-value='3'><i class='fa fa-star fa-fw'></i> </li> <li class='star' title='Excellent' data-value='4'> <i class='fa fa-star fa-fw'></i> </li> <li class='star' title='WOW!!!' data-value='5'> <i class='fa fa-star fa-fw'></i> </li> </ul> </div><span class='rated'></span>";
+
                 $('.modal-title').text("GIF's similar to " + searchText + ": ");
 
-                $('.modal-body').children().remove();
+                clearData("modal-body");
 
-                $('.modal-body').append("<img src=" + this.src + " class='indImage' /> ").append("<h6>Rate this GIF: </h6> <div class='rating-stars text-center'><ul id='stars'><li class='star' title='Poor' data-value='1'> <i class='fa fa-star fa-fw'></i> </li> <li class='star' title='Fair' data-value='2'> <i class='fa fa-star fa-fw'></i></li><li class='star' title='Good' data-value='3'><i class='fa fa-star fa-fw'></i> </li> <li class='star' title='Excellent' data-value='4'> <i class='fa fa-star fa-fw'></i> </li> <li class='star' title='WOW!!!' data-value='5'> <i class='fa fa-star fa-fw'></i> </li> </ul> </div><span class='rated'></span>");
+                $('.modal-body').append(individualGif + ratingHtml);
 
-                /* 1. Visualizing things on Hover - See next part for action on click */
                 $('#stars li').on('mouseover', function () {
-                    var onStar = parseInt($(this).data('value'), 10); // The star currently mouse on
+                    var onStar = parseInt($(this).data('value'), 10);
 
-                    // Now highlight all the stars that's not after the current hovered star
                     $(this).parent().children('li.star').each(function (e) {
                         if (e < onStar) {
                             $(this).addClass('hover');
@@ -46,9 +53,8 @@ $("#searchBtn").click(function () {
                 });
 
 
-                /* 2. Action to perform on click */
                 $('#stars li').on('click', function () {
-                    var onStar = parseInt($(this).data('value'), 10); // The star currently selected
+                    var onStar = parseInt($(this).data('value'), 10);
                     var stars = $(this).parent().children('li.star');
 
                     $('.share').attr('data-bs-dismiss', 'modal');
@@ -77,5 +83,3 @@ $("#searchBtn").click(function () {
     }
 });
 
-
-// GIPHY API: 5bROKS6CGk7upkhqxbHVkDEGl8mbhGko
