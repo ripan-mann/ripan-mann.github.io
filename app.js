@@ -1,5 +1,5 @@
-function clearData(className) {
-    let classn = "." + className;
+function clearData(s, className) {
+    let classn = s + className;
     $(classn).children().remove();
 
 }
@@ -11,7 +11,7 @@ $("#searchBtn").click(function () {
         alert("Enter a value!");
     } else {
 
-        $('#result').children().remove();
+        clearData("#", "result");
 
         console.log(searchText);
 
@@ -30,7 +30,7 @@ $("#searchBtn").click(function () {
 
                 $('.modal-title').text("GIF's similar to " + searchText + ": ");
 
-                clearData("modal-body");
+                clearData(".", "modal-body");
 
                 $('.modal-body').append(individualGif + ratingHtml);
 
@@ -62,6 +62,8 @@ $("#searchBtn").click(function () {
 
                     for (i = 0; i < stars.length; i++) {
                         $(stars[i]).removeClass('selected');
+                        $(this).addClass('hover');
+
                     }
 
                     for (i = 0; i < onStar; i++) {
