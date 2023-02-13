@@ -1,4 +1,4 @@
-# meme-app
+# Meme Search App using GIPHY API
 
 
 ## Demo
